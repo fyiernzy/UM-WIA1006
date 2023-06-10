@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Disease Prediction</title>
+    <style>
+        body {
+            background-image:  url("https://i.pinimg.com/736x/68/51/8a/68518ad1b76f4a8a26e68d60c815acce--mini-heart-positive-thoughts.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .title {
+            background-color: #FFFFE0;
+            padding: 10px;
+        }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="title">
+    <h1>Heart Disease Prediction</h1>
+    </div>
+    <form id="prediction-form">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required><br><br>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+        </select><br><br>
+        
+        <label for="chest_pain_type">Chest Pain Type:</label>
+        <select id="chest_pain_type" name="chest_pain_type" required>
+            <option value="ASY">ASY</option>
+            <option value="ATA">ATA</option>
+            <option value="NAP">NAP</option>
+            <option value="TA">TA</option>
+        </select><br><br>
+
+        <label for="blood_pressure">Blood Pressure:</label>
+        <input type="number" id="blood_pressure" name="blood_pressure" required><br><br>
+
+        <label for="cholesterol">Cholesterol:</label>
+        <input type="number" id="cholesterol" name="cholesterol" required><br><br>
+
+        <label for="fasting_bs">Fasting Blood Sugar:</label>
+        <input type="number" id="fasting_bs" name="fasting_bs" required><br><br>
+
+        <label for="resting_ecg">Resting ECG:</label>
+        <select id="resting_ecg" name="resting_ecg" required>
+            <option value="Normal">Normal</option>
+            <option value="ST">ST-T wave abnormality</option>
+            <option value="LVH">Left ventricular hypertrophy</option>
+        </select><br><br>
+
+        <label for="max_hr">Maximum Heart Rate:</label>
+        <input type="number" id="max_hr" name="max_hr" required><br><br>
+
+        <label for="exercise_angina">Exercise-Induced Angina:</label>
+        <select id="exercise_angina" name="exercise_angina" required>
+            <option value="N">No</option>
+            <option value="Y">Yes</option>
+        </select><br><br>
+
+        <label for="oldpeak">Oldpeak:</label>
+        <input type="number" step="0.01" id="oldpeak" name="oldpeak" required><br><br>
+
+        <label for="st_slope">ST Slope:</label>
+        <select id="st_slope" name="st_slope" required>
+            <option value="Up">Up</option>
+            <option value="Flat">Flat</option>
+            <option value="Down">Down</option>
+        </select><br><br>
+
+        <input type="submit" value="Predict">
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#prediction-form').submit(function(event) {
+                event.preventDefault();
+
+                $.ajax({
+                    url: 'http://localhost:5000/predict',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        console.log(response); // Check the response in the browser console
+                        var prediction = response.prediction;
+                        var resultText = (prediction === 1) ? 'Heart Disease' : 'No Heart Disease';
+                        console.log('Prediction:', resultText); // Check the prediction result in the browser console
+                        // $('#result').text('Prediction: ' + resultText);
+                        alert('Prediction: ' + resultText);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error:', error); // Check for any errors in the browser console
+                    }
+                });
+            });
+        });
+    </script>
+
+    <button onclick="location.href='index.html'" style="margin-top: 10px;">See the data</button>
+
+</body>
+</html>
